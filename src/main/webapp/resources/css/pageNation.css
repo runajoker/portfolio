@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+/* UI Object */
+.paginate{padding:15px 0;text-align:center}
+.paginate a,.paginate strong{display:inline-block;position:relative;_width /**/:14px;margin-left:-5px;padding:3px 5px 1px 4px;color:#333;font-family:'굴림', Gulim;font-size:11px;line-height:normal;text-decoration:none}
+.paginate strong{color:#f60 !important}
+.paginate .pre,.paginate .next{display:inline-block;_width /**/:47px;color:#a0a0a0;font-family:'돋움',Dotum;font-size:11px;font-weight:normal}
+.paginate .pre{padding:3px 9px 1px 16px;background:url(http://static.naver.com/common/paginate/bu_pg3_l_on.gif) no-repeat 8px 4px !important}
+.paginate .next{padding:3px 17px 1px 8px;background:url(http://static.naver.com/common/paginate/bu_pg3_r_on.gif) no-repeat 33px 4px !important}
+.paginate a:hover{text-decoration:underline}
+/* //UI Object */

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.match.MatchDAO">
+	<select id="getMatchingList" resultType="net.msg.em.vo.MatchVO">
+		<![CDATA[
+		select mat_no, to_char(mat_time, 'YYYY-MM-DD HH24:MI') as mat_time, mat_home_name, mat_away_name, mat_memo, mat_play_time, mat_place, mat_home, mat_away
+		from t_matching
+		where mat_no <> 1
+		order by mat_time desc
+		]]>
+	</select>
+	
+	<select id="getMember" parameterType="long" resultType="net.msg.em.vo.MemberVO">
+		select *
+		from t_member
+		where m_no=#{m_no}
+	</select>
+	
+	<select id="getTeam" parameterType="long" resultType="net.msg.em.vo.TeamVO">
+		select *
+		from t_team
+		where t_no=#{t_no}
+	</select>
+	
+	<insert id="insertMatching" parameterType="net.msg.em.vo.MatchVO">
+		insert into t_matching(mat_no, mat_time, mat_place, mat_home, mat_away, mat_home_name, mat_away_name, mat_memo, mat_play_time)
+		values(seq_matching.nextval, to_date(#{mat_time}, 'YYYY-MM-DD HH24:MI'), #{mat_place}, #{mat_home}, 1, #{mat_home_name}, '어웨이 팀 없음', #{mat_memo}, #{mat_play_time})
+	</insert>
+	
+	<select id="getMatch" parameterType="long" resultType="net.msg.em.vo.MatchVO">
+		select *
+		from t_matching
+		where mat_no=#{mat_no}
+	</select>
+	
+	<update id="awayTeamUpdate" parameterType="java.util.Map">
+		update t_matching
+		set mat_away = #{t_no}, mat_away_name = #{mat_away_name}
+		where mat_no = #{mat_no}
+	</update>
+	
+	
+	
+	<select id="countMatchingDay" parameterType="String" resultType="Integer">
+		<![CDATA[
+		select count(*) as cnt
+		from t_matching
+		where to_date(mat_time, 'YYYY-MM-DD') like to_date(#{schedule}, 'YYYY-MM-DD') and mat_no <> 1
+		]]>
+	</select>
+	
+	<select id="getMatchingDayList" resultType="net.msg.em.vo.MatchVO">
+		<![CDATA[
+		select to_char(mat_time, 'YYYY-MM-DD') as mat_time, count(*) as cnt
+		from t_matching
+		where mat_no <>1
+		group by to_char(mat_time, 'YYYY-MM-DD')
+		]]>
+	</select>
+	
+	<select id="getMatchingDayDetail" parameterType="String" resultType="net.msg.em.vo.MatchVO">
+		<![CDATA[
+		select mat_no, to_char(mat_time, 'YYYY-MM-DD HH24:MI') as mat_time, mat_home_name, mat_away_name, mat_memo, mat_play_time, mat_place, mat_home, mat_away
+		from t_matching
+		where to_date(mat_time, 'YYYY-MM-DD') like to_date(#{schedule}, 'YYYY-MM-DD') and mat_no<>1
+		]]>
+	</select>
+	
+	<select id="getMatchingComplete" resultType="net.msg.em.vo.MatchVO">
+	<![CDATA[
+		select mat_no, to_char(mat_time, 'YYYY-MM-DD HH24:MI') as mat_time, mat_home_name, mat_away_name, mat_memo, mat_play_time, mat_place, mat_home, mat_away
+		from t_matching
+		where mat_away <> 1
+	]]>
+	</select>
+	
+	<select id="searchMatNo" parameterType="long" resultType="long">
+		select mat_no
+		from t_matching
+		where mat_home=#{t_no}
+	</select>
+	
+	<insert id="insertTeam_Matching" parameterType="java.util.Map">
+		insert into t_m(t_no, mat_no)
+		values(#{t_no}, #{mat_no})
+	</insert>
+	
+	<delete id="deleteHomeMatching" parameterType="long">
+		delete from t_matching
+		where mat_no = #{mat_no}
+	</delete>
+	
+	<delete id="deleteHomeMatchingTM" parameterType="long">
+		delete from t_m
+		where mat_no = #{mat_no}
+	</delete>
+	
+	<update id="updateAwayMatching" parameterType="long">
+		update t_matching
+		set mat_away = 1, mat_away_name = '어웨이 팀 없음'
+		where mat_no = #{mat_no}
+	</update>
+	
+	<delete id="deleteAwayMatchingTM" parameterType="java.util.Map">
+		delete from t_m
+		where mat_no=#{mat_no} and t_no=#{t_no}
+	</delete>
+</mapper>

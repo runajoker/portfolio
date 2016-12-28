@@ -1,0 +1,14 @@
+1.m_id에 unique키
+
+insert into t_team(t_no, t_name, t_captain, t_place, t_intro)
+values(seq_team.nextval, '팀 없음', 0, '팀 없음', '팀이 없는 상태입니다.');
+select * from t_team;
+
+insert into t_matching(mat_no, mat_time, mat_place, mat_home, mat_away, mat_memo)
+values(seq_matching.nextval, '2016-12-08', '매칭 없음', 1, 1, '매칭이 없는 상태')
+
+insert into t_team(t_no, t_name, t_captain, t_place, t_intro, mat_no)
+values(1, '팀 없음', '팀 없음', '팀 없음', '팀이 없는 상태입니다.', 1);
+
+insert into t_matching(mat_no, mat_time, mat_place, mat_home, mat_away, mat_home_name, mat_away_name, mat_memo)
+values(seq_matching.nextval, '2016-12-08', '매칭 없음', 1, 1, '홈 팀 없음', '어웨이 팀 없음', '매칭이 없는 상태')

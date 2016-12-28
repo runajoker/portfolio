@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.article.ArticleDAO">
+	<select id="getArticleDetail" parameterType="long" resultType="net.msg.em.vo.ArticleVO">
+		select a.art_no, a.art_title, a.art_content, a.art_regdate, a.art_readcount, a.art_com_cnt, m.m_no, m.m_id, m.m_name
+		from t_article a join t_member m
+		on a.m_no = m.m_no
+		where art_no=#{art_no}
+	</select>
+	
+	<update id="updateReadcount" parameterType="long">
+		update t_article
+		set art_readcount = art_readcount+1
+		where art_no=#{art_no}
+	</update>
+	
+	<update id="updateArticle" parameterType="net.msg.em.vo.ArticleVO">
+		update t_article
+		set art_title=#{art_title}, art_content=#{art_content}
+		where art_no=#{art_no}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="long" >
+		delete from t_article
+		where art_no=#{art_no}
+	</delete>
+</mapper>

@@ -1,0 +1,32 @@
+/           :메인
+/community/{b_no}/{pg}/ : 게시물 리스트(공지, 자유, 용병모집, Q&A)
+/community/{b_no}/{pg}/{art_no}/ : 게시물 상세보기(공지, 자유, 용병모집, Q&A)
+/community/{b_no}/{pg}/insert : 게시물 생성
+/community/{b_no}/{pg}/{art_no}/(up,de) : 게시물 CRUD(공지, 자유, 용병모집, Q&A)
+/community/{b_no}/{pg}/{art_no}/insert : 댓글
+/community/{b_no}/{pg}/{art_no}/crud : 댓글 CRUD
+ 
+/myPage/                : 마이 페이지 메인
+/myPage/{m_no}/  		: 유저 정보 확인
+/myPage/{m_no}/update   : 유저 정보 수정
+/myPage/{m_no}/delete	: 회원 탈퇴
+
+/team/{t_no}/		: 팀 정보 선택 / 확인
+/team/{t_no}/update	: 팀 정보 수정
+/team/{t_no}/delete	: 팀 탈퇴(개인) / 팀삭제(주장 삭제 나머지 탈퇴)
+/team/{t_no}/board/{b_no} : 팀 게시판
+
+/login(GET) : 로그인 처리 FORM 이동
+/login(POST) : 로그인 처리 - 세션 저장(memberVO)
+
+/regist(GET) : 회원가입 FORM 이동
+/regist(POST) : 회원가입 처리
+
+/match/                : 매치보드 메인
+/match/goMatching(GET) : 매칭신청 FORM이동
+/match/goMatching(POST) : 매칭신청 처리
+
+/match/awayMatching(GET) : away팀 매칭 신청FORM이동
+/match/awayMatching(POST) : away팀 매칭 신청처리
+
+/stadium/

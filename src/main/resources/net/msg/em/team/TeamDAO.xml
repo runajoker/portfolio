@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.team.TeamDAO">
+	<insert id="insertTeam" parameterType="net.msg.em.vo.TeamVO">
+      insert into t_team(t_no, t_name, t_captain, t_captain_no, t_place, t_intro)
+      values(seq_team.nextval, #{t_name}, #{t_captain}, #{t_captain_no}, #{t_place}, #{t_intro})
+   </insert>
+	
+	<update id="updateCaptain" parameterType="long">
+      update t_member
+      set m_admin=3, t_no = (select t.t_no 
+      						 from	t_member m join t_team t 
+      						 on		m.m_no = t.t_captain_no 
+      						 where	m.m_no=#{m_no})
+      where m_no=#{m_no}
+   </update>
+	
+	<update id="updateCaptain2" parameterType="int">
+    	update	t_team
+		set		t_captain = (select m_name from t_member where m_admin = 3 and t_no = #{t_no})
+		where	t_no = #{t_no}
+   	</update>
+	
+	<select id="getTeam" parameterType="long" resultType="net.msg.em.vo.TeamVO">
+      	select	*
+		from	t_team
+		where	t_no = #{t_no}
+   </select>
+   
+   <select id="getTeam2" parameterType="net.msg.em.vo.MemberVO" resultType="net.msg.em.vo.TeamVO">
+      	select	t.t_no, t.t_name, t.t_captain, t.t_place, t.t_intro, t.t_record_win, t.t_record_draw, t.t_record_lose, t.t_captain_no, 
+		      	m.m_admin as "memberVO.m_admin", m.m_no as "memberVO.m_no",  m_pw as "memberVO.m_pw", m_id as "memberVO.m_id", 
+				m_name as "memberVO.m_name", m_phone as "memberVO.m_phone", m_position as "memberVO.m_position", m_score as "memberVO.m_score"
+		from	t_team t join t_member m
+		on		t.t_no = m.t_no
+		where	t.t_no = #{t_no} and m.m_no = #{m_no}
+   </select>
+   
+   <select id="getTeamMemList" parameterType="net.msg.em.vo.MemberVO" resultType="net.msg.em.vo.TeamVO">
+      	select	t.t_no, t.t_name, t.t_captain, t.t_place, t.t_intro, t.t_record_win, t.t_record_draw, t.t_record_lose, t.t_captain_no, 
+		      	m.m_admin as "memberVO.m_admin", m.m_no as "memberVO.m_no",  m_pw as "memberVO.m_pw", m_id as "memberVO.m_id", 
+				m_name as "memberVO.m_name", m_phone as "memberVO.m_phone", m_position as "memberVO.m_position", m_score as "memberVO.m_score"
+		from	t_team t join t_member m
+		on		t.t_no = m.t_no
+		where	t.t_no = #{t_no}
+   </select>
+	
+	<select id="getMember" parameterType="long" resultType="net.msg.em.vo.MemberVO">
+      select m_no, m_id, m_name, m_admin, m_phone, m_position, m_score, t_no
+      from t_member
+      where m_no=#{m_no}
+    </select>
+   
+	<select id="checkDelTeam" parameterType="net.msg.em.vo.MemberVO" resultType="Integer">
+      	select	count(t_no)  
+		from	T_member
+		where	t_no = #{t_no} and m_pw = #{m_pw}
+   </select>
+
+	<select id="getTeamList" resultType="net.msg.em.vo.TeamVO">
+    <![CDATA[
+      select	t.t_no, t.t_name, t.t_place, t.t_captain, t.t_record_win, t.t_record_draw, t.t_record_lose, m.cnt as "memberVO.m_no", t.t_intro
+      from		t_team t inner join (select	count(*) as cnt, t_no
+								      from	t_member
+								      group	by t_no) m
+      on      	t.t_no = m.t_no
+      where   	t.t_no <> 1
+   ]]>
+   </select>
+   
+	<update id="withdrawTeam" parameterType="long" >
+		update	t_member
+    	set		t_no = 1, m_admin = 1
+    	where	m_no = #{m_no} 
+	</update>
+	
+	<update id="updateTeam" parameterType="net.msg.em.vo.TeamVO" >
+		update t_team
+		set t_place = #{t_place}, t_intro=#{t_intro}
+		where t_no = #{t_no}
+	</update>
+	
+	<update id="joinTeam" parameterType="net.msg.em.vo.MemberVO" >
+		update	t_member
+	  	set		t_no = #{t_no}, m_admin = 2
+	  	where	m_no = #{m_no}
+	</update>
+	
+	<update id="delchangememTeam" parameterType="net.msg.em.vo.MemberVO" >
+		update	t_member
+		set		m_admin = 1, t_no = 1
+		where	t_no = #{t_no}
+	</update>
+	
+	<delete id="deleteTeam" parameterType="net.msg.em.vo.TeamVO">
+		delete 
+		from	t_team t
+		where	t.t_no = #{t_no}
+	</delete>
+	
+	<select id="getTeamMatchingList" parameterType="long" resultType="net.msg.em.vo.MatchVO">
+		<![CDATA[
+	 		select mat_no, to_char(mat_time, 'YY/MM/DD HH24:MI') as mat_time, mat_place, mat_home, mat_away, mat_home_name, mat_away_name, mat_memo, mat_play_time
+	 		from t_matching
+	 		where mat_home = #{t_no} or mat_away = #{t_no}
+ 		]]>
+ 	</select>
+ 	
+ 	<update id="entrustTeam" parameterType="net.msg.em.vo.TeamVO" >
+		update	t_team
+		set		t_captain_no = #{m_no}
+		where	t_no = #{t_no}
+	</update>
+ 	<update id="upAdminTeam" parameterType="int" >
+		update	t_member
+		set		m_admin = 3
+		where	m_no = #{m_no}
+	</update>
+ 	<update id="downAdminTeam" parameterType="long" >
+		update	t_member
+		set		m_admin = 2
+		where	m_no = #{m_no}
+	</update>
+	
+	
+</mapper>

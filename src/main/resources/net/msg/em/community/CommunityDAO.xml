@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.community.CommunityDAO">
+	<select id="getArticlePageList" parameterType="net.msg.em.vo.PageVO" resultType="net.msg.em.vo.ArticleVO">
+		select  B.*
+		from	(select A.*, rownum as rnum
+				from	(select a.art_no, a.art_title, to_char(a.art_regdate, 'YYYY-MM-DD HH24:MI') as art_regdate, a.art_readcount, a.art_com_cnt, m.m_no, m.m_id, m.m_name
+						from t_article a inner join t_member m
+						on a.m_no = m.m_no
+						where b_no=#{b_no}
+						order by a.art_no desc) A) B
+		where rnum between #{startnum} and #{endnum}
+	</select>
+	
+	<select id="getTotalCount" parameterType="int" resultType="long">
+		select count(*) as cnt
+		from t_article
+		where b_no=#{b_no}
+	</select>
+	
+	<select id="getBoard" parameterType="int" resultType="net.msg.em.vo.BoardVO">
+		select *
+		from t_board
+		where b_no=#{b_no}
+	</select>
+	
+	<insert id="insertArticle" parameterType="net.msg.em.vo.ArticleVO">
+		insert into t_article(art_no, art_title, art_content, b_no, m_no)
+		values(seq_article.nextval, #{art_title}, #{art_content}, #{b_no}, #{m_no})
+	</insert>
+
+	<update id="increaseCommentCount" parameterType="long">
+		update t_article set art_com_cnt = art_com_cnt + 1 where art_no = #{art_no}
+	</update>
+	
+	<update id="decreaseCommentCount" parameterType="long">
+		update t_article set art_com_cnt = art_com_cnt - 1 where art_no = #{art_no}
+	</update>
+		
+</mapper>

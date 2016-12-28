@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.message.MessageDAO">
+
+   <select id="getMessageList" parameterType="long"
+      resultType="net.msg.em.vo.MessageVO">
+      select g_no, m.m_no as m_no, m_id, m_name, g_content,
+      g.g_regdate , g.g_readdate as g_readdate from t_member m
+      join t_message
+      g
+      on m.m_no = g.m_no
+      where g_send_no=#{m_no} and g_check='1' and
+      g_delete='1'
+      order by g_no desc
+   </select>
+
+   <select id="getSendMessageList" parameterType="long"
+      resultType="net.msg.em.vo.MessageVO">
+      select g_no, m.m_no as m_no, m_id, m_name, g_content,
+      g.g_regdate , g.g_readdate as g_readdate from t_member m
+      join t_message
+      g
+      on m.m_no = g.m_no
+      where g_send_no=#{m_no} and g_check='0' and
+      g_delete='1'
+      order by g_no desc
+   </select>
+
+   <select id="getDetailMessage" parameterType="net.msg.em.vo.MessageVO"
+      resultType="net.msg.em.vo.MessageVO">
+      select g_no, m_id,m.m_no as m_no, m_name, g_content,
+      g.g_regdate as g_regdate, g.g_readdate as g_readdate from t_member m
+      join t_message g
+      on m.m_no = g.m_no
+      where g_send_no=#{m_no} and
+      g_check='1' and g_delete='1' and g_no = #{g_no}
+   </select>
+
+   <select id="getDetailSendMessage" parameterType="net.msg.em.vo.MessageVO"
+      resultType="net.msg.em.vo.MessageVO">
+      select g_no, m_id,m.m_no as m_no, m_name, g_content,
+      g.g_regdate as g_regdate, g.g_readdate as g_readdate from t_member m
+      join t_message g
+      on m.m_no = g.m_no
+      where g_send_no=#{m_no} and
+      g_check='0' and g_delete='1' and g_no = #{g_no}
+   </select>
+
+   <update id="checkMessageRefreshReadTime" parameterType="long">
+      UPDATE
+      t_message SET
+      g_readdate =
+      (case
+      when g_readdate is null
+      then sysdate
+      else
+      g_readdate
+      end
+      )
+      where g_no = #{g_no}
+   </update>
+
+   <insert id="messageInsertAction" parameterType="net.msg.em.vo.MessageVO">
+      insert into
+      t_message(g_no, g_send_no, g_content, g_check, m_no)
+      values
+      (seq_message.nextval, #{g_send_no} , #{g_content}, '1', #{m_no})
+   </insert>
+   <insert id="messageInsertAction2" parameterType="net.msg.em.vo.MessageVO">
+      insert into
+      t_message(g_no, g_send_no, g_content, g_check, m_no)
+      values
+      (seq_message.nextval, #{m_no} , #{g_content}, '0', #{g_send_no})
+   </insert>
+
+   <update id="oneMessageDelete" parameterType="String">
+      update t_message set
+      g_delete='0'
+      where g_no=#{g_no}
+   </update>
+
+   <update id="checkboxSelectMessageDelete" parameterType="java.util.List">
+      update t_message set
+      g_delete='0'
+      where 
+      <foreach collection="list" item="item" separator="or">
+            g_no = ${item}
+        </foreach>
+
+   </update>
+</mapper>

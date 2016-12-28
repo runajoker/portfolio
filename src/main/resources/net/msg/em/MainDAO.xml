@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.MainDAO">
+   <select id="getCountNewMesssage" parameterType="long" resultType="String">
+      select count(*) as cnt from t_message where g_send_no=#{m_no} and g_check='1' and g_readdate is null and g_delete='1'
+   </select>
+   
+   
+   <select id="getMatchingList" resultType="net.msg.em.vo.MatchVO">
+		<![CDATA[
+		
+		select b.*
+		from	(select rownum as rnum ,a.*
+		 		from (select m.mat_no, to_char(m.mat_time, 'YYYY-MM-DD HH24:MI') as mat_time, m.mat_memo, m.mat_place,
+			 				  t.t_no as "team_homeVO.t_no", t.t_name as "team_homeVO.t_name", t.t_record_win as "team_homeVO.t_record_win", t.t_record_draw as "team_homeVO.t_record_draw", t.t_record_lose as "team_homeVO.t_record_lose"
+						from	t_matching m join t_team t
+						on		m.mat_home = t.t_no
+						where	mat_no <> 1 and mat_away = 1
+						order	by mat_time desc) a) b 
+		where	b.rnum <= 3 
+		order	by b.rnum desc
+		]]>
+	</select>
+   <select id="getTeamList" resultType="net.msg.em.vo.TeamVO">
+		<![CDATA[
+		select b.*
+		from(select rownum as rnum ,a.*
+			 from (select	t.t_no, t.t_name, t.t_place, t.t_captain, t.t_record_win, t.t_record_draw, t.t_record_lose, m.cnt as "memberVO.m_no"
+		     	 	from	t_team t inner join (select	count(*) as cnt, t_no
+											     from	t_member
+									      		 group	by t_no) m
+		      on      	t.t_no = m.t_no
+		      where   	t.t_no <> 1) a) b 
+		where b.rnum <= 3 
+		order by b.rnum desc
+		]]>
+	</select>
+    <select id="getArticleList" resultType="net.msg.em.vo.ArticleVO">
+		<![CDATA[
+		
+		select b.*
+		from	(select rownum as rnum ,a.*
+			 	 from (select 	art_no, art_title 
+						from 	t_article
+						where	b_no = 1) a) b 
+		where b.rnum <= 3 
+		order by b.rnum desc
+		]]>
+	</select>
+    <select id="getArticleList2" resultType="net.msg.em.vo.ArticleVO">
+		<![CDATA[
+		
+		select b.*
+		from	(select rownum as rnum ,a.*
+			 	 from (select 	art_no, art_title 
+						from 	t_article
+						where	b_no = 2) a) b 
+		where b.rnum <= 3 
+		order by b.rnum desc
+		]]>
+	</select>
+    <select id="getArticleList3" resultType="net.msg.em.vo.ArticleVO">
+		<![CDATA[
+		
+		select b.*
+		from	(select rownum as rnum ,a.*
+			 	 from (select 	art_no, art_title 
+						from 	t_article
+						where	b_no = 3) a) b 
+		where b.rnum <= 3 
+		order by b.rnum desc
+		]]>
+	</select>
+</mapper>

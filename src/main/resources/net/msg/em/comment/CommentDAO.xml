@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.comment.CommentDAO">
+
+	<select id="getCommentList" parameterType="long"
+		resultType="net.msg.em.vo.CommentVO">
+		select
+		com_no ,
+		com_comment ,
+		com_regdate ,
+		c.m_no as m_no ,
+		art_no ,
+		m.m_id as m_id ,
+		m.m_name as m_name
+		from t_comment c join t_member m
+		on c.m_no = m.m_no
+		where art_no = #{art_no}
+		order by com_no asc
+	</select>
+
+	<insert id="insertComment" parameterType="net.msg.em.vo.CommentVO">
+		insert into
+		t_comment(com_no, com_comment, m_no, art_no)
+		values
+		(seq_comment.nextval, #{com_comment}, #{m_no}, #{art_no})
+	</insert>
+	
+	<delete id="deleteComment" parameterType="long">
+		delete from t_comment where com_no = #{com_no}	
+	</delete>
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" 
+			p:jndiName="java:comp/env/jdbc/matchingdbcp" /> 
+		
+		<!-- Main Setting -->
+	      <bean id="mainFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+	         p:dataSource-ref="dataSource"
+	         p:typeAliasesPackage="net.msg.em" /> 
+	         
+	      <bean id="MainDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+	         <property name="mapperInterface" value="net.msg.em.MainDAO" />
+	         <property name="sqlSessionFactory" ref="messageFactory" />
+	      </bean>
+      
+     	 <!-- Comment Setting -->
+	      <bean id="commentFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+	         p:dataSource-ref="dataSource"
+	         p:typeAliasesPackage="net.msg.em.comment" /> 
+	         
+	      <bean id="CommentDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+	         <property name="mapperInterface" value="net.msg.em.comment.CommentDAO" />
+	         <property name="sqlSessionFactory" ref="commentFactory" />
+	      </bean>
+      
+		<!-- Login Setting -->
+		<bean id="loginFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.login" /> 
+			
+		<bean id="LoginDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.login.LoginDAO" />
+			<property name="sqlSessionFactory" ref="loginFactory" />
+		</bean> 
+		
+		<!-- Login Setting -->
+		<bean id="articleFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.article" /> 
+			
+		<bean id="ArticleDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.article.ArticleDAO" />
+			<property name="sqlSessionFactory" ref="articleFactory" />
+		</bean> 
+		
+		<!-- Regist Setting -->
+		<bean id="registFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.regist" /> 
+		<bean id="RegistDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.regist.RegistDAO" />
+			<property name="sqlSessionFactory" ref="registFactory" />
+		</bean> 
+		
+		<!-- MyPage Setting -->
+		<bean id="myPageFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.myPage" /> 
+		<bean id="MyPageDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.myPage.MyPageDAO" />
+			<property name="sqlSessionFactory" ref="myPageFactory" />
+		</bean> 
+		
+		<!-- Team Setting -->
+		<bean id="teamFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.team" /> 
+		<bean id="TeamDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.team.TeamDAO" />
+			<property name="sqlSessionFactory" ref="teamFactory" />
+		</bean> 
+		
+		<!-- Match Setting -->
+		<bean id="matchFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.match" /> 
+		<bean id="MatchDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.match.MatchDAO" />
+			<property name="sqlSessionFactory" ref="matchFactory" />
+		</bean> 
+		
+		<!-- Stadium Setting -->
+		<bean id="stadiumFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.stadium" /> 
+		<bean id="StadiumDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.stadium.StadiumDAO" />
+			<property name="sqlSessionFactory" ref="stadiumFactory" />
+		</bean> 
+		
+		<!-- Community Setting -->
+		<bean id="communityFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.community" /> 
+		<bean id="CommunityDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.community.CommunityDAO" />
+			<property name="sqlSessionFactory" ref="communityFactory" />
+		</bean> 
+		
+		<!-- Community Setting -->
+		<bean id="messageFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:typeAliasesPackage="net.msg.em.message" /> 
+		<bean id="MessageDAO" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+			<property name="mapperInterface" value="net.msg.em.message.MessageDAO" />
+			<property name="sqlSessionFactory" ref="messageFactory" />
+		</bean> 
+</beans>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper      
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.msg.em.myPage.MyPageDAO">
+
+
+	
+	<select id="getMember" parameterType="Long" resultType="net.msg.em.vo.MemberVO" >
+		select	m.m_no, m_id, m_name, m_phone, m_position, t.t_name as "teamVO.t_name", m.m_admin
+		from	t_member m inner join t_team t
+		on		m.t_no = t.t_no
+		where	m.m_no = #{m_no}
+		
+	</select>
+	
+	
+	<!-- 
+	<select id="memberInfo" parameterType="net.msg.em.vo.MemberVO" resultType="net.msg.em.vo.MemberVO" >
+		select m_phone, m_id, m_name, m_position
+		from t_member
+		where m_id=#{m_id}
+	
+	</select>
+
+ -->
+ 
+ 
+	<update id="updateMember" parameterType="net.msg.em.vo.MemberVO" >
+		update t_member
+		set	m_phone=#{m_phone}, m_position=#{m_position}
+		where m_no = #{m_no}
+	</update>
+	
+	
+	<delete id="deleteMem" parameterType="net.msg.em.vo.MemberVO">
+		delete	from	t_member
+		where	m_no = #{m_no} and m_pw = #{m_pw}
+	</delete>
+	
+	<select id="returnToMemberNumber" parameterType="String" resultType="net.msg.em.vo.MemberVO">
+		select m_no,m_id, m_name from t_member where m_id = #{m_id}	
+	</select>
+</mapper>
